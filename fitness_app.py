@@ -1,49 +1,72 @@
 import streamlit as st
 import datetime
 
-# Application Page Configuration
+# Application Page Configuration (Tab Name & Icon)
 st.set_page_config(page_title="Elite Fitness Coach", page_icon="🏋️‍♂️", layout="wide")
 
-# Professional CSS Styling (Clean White & Blue Theme)
-# app.py ရဲ့ အပေါ်ဆုံးနားက st.markdown အပိုင်းမှာ ဒါကို အစားထိုးပါ
+# --- 🛑 ALL COLOR & DISPLAY FIXES (CSS) 🛑 ---
+# This forces light mode even if the phone is in dark mode
 st.markdown("""
     <style>
-    /* 1. App Background တစ်ခုလုံးကို အဖြူရောင်ထားမယ် */
+    /* 1. App Background - Force White */
     .stApp {
         background-color: #ffffff !important;
-    }
-
-    /* 2. ခေါင်းစဉ်များ (Titles & Headers) အားလုံးကို အမည်းရောင်ထားမယ် */
-    h1, h2, h3, h4, h5, h6, p, span, label {
         color: #000000 !important;
     }
 
-    /* 3. Tabs (Daily Workout, Nutrition) စာသားတွေကို အမည်းရောင်ထားမယ် */
-    .stTabs [data-baseweb="tab"] p {
+    /* 2. All Text (Headers, Paragraphs, Labels) - Force Black */
+    h1, h2, h3, h4, h5, h6, p, span, label, div {
         color: #000000 !important;
-        font-weight: bold !important;
     }
 
-    /* 4. Checkbox အကွက်လေးတွေကို ပိုမြင်သာအောင် ပြင်မယ် */
+    /* 3. FIX: Sidebar Arrow & Text visibility */
+    #MainMenu, header, .stApp header {
+        background-color: #ffffff !important;
+    }
+    .stApp [data-testid="stSidebarCollapseButton"] svg {
+        fill: #000000 !important; /* Forces arrow to Black */
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #f1f3f6 !important; /* Light Gray Sidebar */
+    }
+    section[data-testid="stSidebar"] * {
+        color: #000000 !important; /* All sidebar text Black */
+    }
+
+    /* 4. FIX: Checkbox Text Visibility (ghost text fix) */
     .stCheckbox {
-        background-color: #f1f3f6 !important; /* မီးခိုးနုရောင် Background */
+        background-color: #f8f9fa !important; /* Faint gray background */
         padding: 15px !important;
         border-radius: 12px !important;
         border: 1px solid #d1d5db !important;
         margin-bottom: 10px !important;
     }
-
-    /* 5. Checkbox ထဲက စာသားအရောင်ကို အမည်းရောင် အတင်းလုပ်မယ် */
     .stCheckbox label div[data-testid="stMarkdownContainer"] p {
-        color: #000000 !important;
+        color: #000000 !important; /* Text is now SOLID BLACK */
         font-size: 16px !important;
         font-weight: 500 !important;
     }
 
-    /* 6. Sidebar ထဲက စာသားတွေကိုပါ အမည်းရောင်ပြောင်းမယ် */
-    section[data-testid="stSidebar"] .stText, 
-    section[data-testid="stSidebar"] label p {
+    /* 5. Tabs Styling (Daily Workout, Nutrition) */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+        background-color: #ffffff !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px 8px 0 0;
+        background-color: #f1f3f6;
         color: #000000 !important;
+        font-weight: bold;
+    }
+    .stTabs [data-baseweb="tab"] p {
+        color: #000000 !important; /* Ensure Tab Text is Black */
+    }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        background-color: #1f77b4 !important; /* Blue when selected */
+        color: #ffffff !important;
+    }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] p {
+        color: #ffffff !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -59,9 +82,13 @@ height = st.sidebar.number_input("Height (cm)", value=162.56)
 # BMI Logic
 bmi = weight / ((height/100) ** 2)
 
-# --- DATABASE: YOUR PLANS ---
-today = datetime.datetime.now().strftime("%A")
+# --- DATABASE & DYNAMIC DAY ---
+# 1. FIX: Dynamic Date Logic (Get Real Day)
+today_dt = datetime.datetime.now()
+today_name = today_dt.strftime("%A") # e.g., "Monday"
+real_date = today_dt.strftime("%d %b %Y") # e.g., "Monday, 27 May 2024"
 
+# Plans remain the same
 workout_data = {
     "Monday": {"focus": "Chest + Triceps", "ex": ["Bench Press – 4 × 10", "Incline Dumbbell Press – 3 × 10", "Push Ups – 3 × 15", "Tricep Dips – 3 × 12", "Tricep Pushdown – 3 × 12", "Cardio (Treadmill) – 15 min"]},
     "Tuesday": {"focus": "Back + Biceps", "ex": ["Lat Pulldown – 4 × 10", "Seated Row – 3 × 10", "Dumbbell Row – 3 × 10", "Barbell Curl – 3 × 12", "Hammer Curl – 3 × 12", "Cardio – 15 min"]},
@@ -84,19 +111,21 @@ nutrition_data = {
 
 # --- MAIN DASHBOARD ---
 st.write(f"### Welcome, {name}! ✨")
-st.write(f"Today is **{today}**")
+st.markdown(f"Today is **{today_name}** ({real_date})") # Display real day and date
 
 tab1, tab2, tab3 = st.tabs(["📅 Daily Workout", "🥗 Daily Nutrition", "📈 Progress Status"])
 
 with tab1:
-    plan = workout_data[today]
+    plan = workout_data[today_name] # Use dynamic day
     st.subheader(f"Focus: {plan['focus']}")
+    st.write("Mark exercises as completed:")
     for ex in plan['ex']:
-        st.checkbox(ex, key=f"ex_{ex}_{today}")
+        # Unique keys ensure checkboxes work independently
+        st.checkbox(ex, key=f"ex_{ex}_{today_name}") 
 
 with tab2:
-    nutri = nutrition_data[today]
-    st.subheader(f"Meal Plan for {today}")
+    nutri = nutrition_data[today_name] # Use dynamic day
+    st.subheader(f"Meal Plan for {today_name}")
     
     col1, col2 = st.columns(2)
     with col1:
@@ -108,7 +137,8 @@ with tab2:
 
 with tab3:
     st.subheader("Your Body Metrics")
-    st.metric("Body Mass Index (BMI)", round(bmi, 2))
+    # Clean, large BMI display
+    st.markdown(f"<p style='font-size: 40px; font-weight: bold; color: #1f77b4 !important;'>{round(bmi, 2)}</p>", unsafe_allow_html=True)
     
     st.divider()
     st.markdown("### ❗ Key Success Tips")
@@ -116,5 +146,5 @@ with tab3:
 
 # --- FOOTER ---
 st.divider()
-st.markdown("<h3 style='text-align: center; color: #1f77b4;'>\"Your only limit is you. Build the best version of yourself today!\"</h3>", unsafe_allow_html=True)
-
+# Motivational text remains at bottom
+st.markdown("<h3 style='text-align: center; color: #1f77b4 !important;'>\"Your only limit is you. Build the best version of yourself today!\"</h3>", unsafe_allow_html=True)
