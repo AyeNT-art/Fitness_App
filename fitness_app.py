@@ -7,10 +7,24 @@ st.set_page_config(page_title="Elite Fitness & Nutrition", page_icon="🏋️‍
 # Custom Styling for Professional Look
 st.markdown("""
     <style>
-    .main { background-color: #f4f7f6; }
-    .stCheckbox { background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 5px; }
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
-    .stTabs [data-baseweb="tab"] { font-weight: bold; padding: 10px 20px; }
+    /* Background တစ်ခုလုံးကို အဖြူရောင်နီးပါး ထားပါမယ် */
+    .stApp {
+        background-color: #f8f9fa;
+    }
+    /* Checkbox အကွက်လေးတွေကို စာသားအမည်းရောင်ဖြစ်အောင် ပြင်ပါမယ် */
+    .stCheckbox {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        border: 1px solid #eeeeee !important;
+        margin-bottom: 10px !important;
+    }
+    /* Checkbox ထဲက စာသားအရောင်ကို အမည်းရောင်ဖြစ်အောင် အတင်းသတ်မှတ်ပါမယ် */
+    .stCheckbox p {
+        color: #000000 !important;
+        font-weight: 500 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -95,4 +109,5 @@ with tab3:
 # --- FOOTER ---
 st.divider()
 st.markdown("<h3 style='text-align: center; color: #E74C3C;'>\"Your only limit is you. Build the best version of yourself!\"</h3>", unsafe_allow_html=True)
+
 st.markdown("<p style='text-align: center; opacity: 0.6;'>Consistency is the key to transformation.</p>", unsafe_allow_html=True)
