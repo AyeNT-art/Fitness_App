@@ -5,43 +5,45 @@ import datetime
 st.set_page_config(page_title="Elite Fitness Coach", page_icon="🏋️‍♂️", layout="wide")
 
 # Professional CSS Styling (Clean White & Blue Theme)
+# app.py ရဲ့ အပေါ်ဆုံးနားက st.markdown အပိုင်းမှာ ဒါကို အစားထိုးပါ
 st.markdown("""
     <style>
-    /* Main Background */
+    /* 1. App Background တစ်ခုလုံးကို အဖြူရောင်ထားမယ် */
     .stApp {
-        background-color: #f5f7f9;
+        background-color: #ffffff !important;
     }
-    /* Tabs Styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 24px;
-        background-color: transparent;
+
+    /* 2. ခေါင်းစဉ်များ (Titles & Headers) အားလုံးကို အမည်းရောင်ထားမယ် */
+    h1, h2, h3, h4, h5, h6, p, span, label {
+        color: #000000 !important;
     }
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        white-space: pre-wrap;
-        font-weight: bold;
-        font-size: 16px;
-        color: #4b4b4b;
+
+    /* 3. Tabs (Daily Workout, Nutrition) စာသားတွေကို အမည်းရောင်ထားမယ် */
+    .stTabs [data-baseweb="tab"] p {
+        color: #000000 !important;
+        font-weight: bold !important;
     }
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #1f77b4;
-    }
-    /* Checkbox Styling for better visibility */
+
+    /* 4. Checkbox အကွက်လေးတွေကို ပိုမြင်သာအောင် ပြင်မယ် */
     .stCheckbox {
-        background-color: #ffffff;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid #e6e9ef;
-        margin-bottom: 8px;
-        box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+        background-color: #f1f3f6 !important; /* မီးခိုးနုရောင် Background */
+        padding: 15px !important;
+        border-radius: 12px !important;
+        border: 1px solid #d1d5db !important;
+        margin-bottom: 10px !important;
     }
-    .stCheckbox p {
-        color: #31333f !important;
-        font-size: 15px !important;
+
+    /* 5. Checkbox ထဲက စာသားအရောင်ကို အမည်းရောင် အတင်းလုပ်မယ် */
+    .stCheckbox label div[data-testid="stMarkdownContainer"] p {
+        color: #000000 !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
     }
-    /* Sidebar styling */
-    section[data-testid="stSidebar"] {
-        background-color: #ffffff;
+
+    /* 6. Sidebar ထဲက စာသားတွေကိုပါ အမည်းရောင်ပြောင်းမယ် */
+    section[data-testid="stSidebar"] .stText, 
+    section[data-testid="stSidebar"] label p {
+        color: #000000 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -115,3 +117,4 @@ with tab3:
 # --- FOOTER ---
 st.divider()
 st.markdown("<h3 style='text-align: center; color: #1f77b4;'>\"Your only limit is you. Build the best version of yourself today!\"</h3>", unsafe_allow_html=True)
+
