@@ -4,75 +4,18 @@ import datetime
 # Application Page Configuration
 st.set_page_config(page_title="Elite Fitness Coach", page_icon="🏋️‍♂️", layout="wide")
 
-# --- 🛑 THE FINAL UI FIX (FORCE LIGHT MODE) 🛑 ---
+# --- THE FINAL UI FIX (FORCE LIGHT MODE) ---
 st.markdown("""
     <style>
-    /* 1. App Background - Force White */
-    .stApp {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
-
-    /* 2. All Text - Force Black */
-    h1, h2, h3, h4, h5, h6, p, span, label, div {
-        color: #000000 !important;
-    }
-
-    /* 3. SIDEBAR & INPUT BOX FIXES */
-    section[data-testid="stSidebar"] {
-        background-color: #f8f9fa !important; /* Sidebar light gray */
-    }
-    
-    /* Input box background white and text black */
-    div[data-baseweb="input"] {
-        background-color: #ffffff !important;
-        border: 1px solid #d1d5db !important;
-        border-radius: 8px !important;
-    }
-    
-    input {
-        color: #000000 !important; /* Input text black */
-        -webkit-text-fill-color: #000000 !important;
-    }
-
-    /* Sidebar collapse arrow black */
-    .stApp [data-testid="stSidebarCollapseButton"] svg {
-        fill: #000000 !important;
-    }
-
-    /* 4. CHECKBOX FIXES */
-    .stCheckbox {
-        background-color: #f1f3f6 !important;
-        padding: 15px !important;
-        border-radius: 12px !important;
-        border: 1px solid #d1d5db !important;
-        margin-bottom: 10px !important;
-    }
-    .stCheckbox label div[data-testid="stMarkdownContainer"] p {
-        color: #000000 !important;
-        font-weight: 500 !important;
-    }
-
-    /* 5. TABS FIXES */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: #ffffff !important;
-    }
-    .stTabs [data-baseweb="tab"] p {
-        color: #000000 !important;
-        font-weight: bold !important;
-    }
-    .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        background-color: #1f77b4 !important;
-        color: #ffffff !important;
-    }
-    .stTabs [data-baseweb="tab"][aria-selected="true"] p {
-        color: #ffffff !important;
-    }
-
-    /* Progress Status List Fix (Success Tips) */
-    ul li {
-        color: #000000 !important;
-    }
+    .stApp { background-color: #ffffff !important; color: #000000 !important; }
+    h1, h2, h3, h4, h5, h6, p, span, label, div { color: #000000 !important; }
+    section[data-testid="stSidebar"] { background-color: #f8f9fa !important; }
+    div[data-baseweb="input"] { background-color: #ffffff !important; border: 1px solid #d1d5db !important; border-radius: 8px !important; }
+    input { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+    .stCheckbox { background-color: #f1f3f6 !important; padding: 15px !important; border-radius: 12px !important; border: 1px solid #d1d5db !important; margin-bottom: 10px !important; }
+    .stTabs [data-baseweb="tab-list"] { background-color: #ffffff !important; }
+    .stTabs [data-baseweb="tab"] p { color: #000000 !important; font-weight: bold !important; }
+    .stTabs [data-baseweb="tab"][aria-selected="true"] { background-color: #1f77b4 !important; color: #ffffff !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -92,9 +35,9 @@ today_dt = datetime.datetime.now()
 today_name = today_dt.strftime("%A") 
 real_date = today_dt.strftime("%d %b %Y") 
 
-# Data (Workout & Nutrition)
+# Data
 workout_data = {
-    "Monday": {"focus": "Chest + Triceps", "ex": ["Bench Press – 4 × 10", "Incline Dumbbell Press – 3 × 10", "Push Ups – 3 × 15", "Tricep Dips – 3 × 12", "Tricep Pushdown – 3 × 12", "Cardio (Treadmill) – 15 min"]},
+    "Monday": {"focus": "Chest + Triceps", "ex": ["Bench Press – 4 × 10", "Incline Dumbbell Press – 3 × 10", "Push Ups – 3 × 15", "Tricep Dips – 3 × 12", "Tricep Pushdown – 3 × 12", "Cardio – 15 min"]},
     "Tuesday": {"focus": "Back + Biceps", "ex": ["Lat Pulldown – 4 × 10", "Seated Row – 3 × 10", "Dumbbell Row – 3 × 10", "Barbell Curl – 3 × 12", "Hammer Curl – 3 × 12", "Cardio – 15 min"]},
     "Wednesday": {"focus": "Rest / Light Cardio", "ex": ["Walking / Cycling – 30 min", "Stretching – 10 min"]},
     "Thursday": {"focus": "Legs", "ex": ["Squats – 4 × 10", "Leg Press – 3 × 12", "Lunges – 3 × 10", "Leg Curl – 3 × 12", "Calf Raises – 3 × 15", "Cardio – 10 min"]},
@@ -104,19 +47,20 @@ workout_data = {
 }
 
 nutrition_data = {
-    "Monday": {"bf": "Oatmeal 1 bowl, Boiled eggs 2, Banana 1", "lunch": "Brown rice 1 cup, Grilled chicken, Veg", "snack": "Yogurt, Almonds", "dinner": "Grilled fish, Salad, Sweet potato 1"},
-    "Tuesday": {"bf": "Whole wheat bread 2, Peanut butter, Boiled eggs 2, Apple", "lunch": "Brown rice, Chicken curry (low oil), Veg", "snack": "Banana + Yogurt", "dinner": "Tuna salad, Boiled egg 1"},
-    "Wednesday": {"bf": "Oatmeal, 2 Boiled eggs, Orange", "lunch": "Rice 1 cup, Grilled fish, Veg", "snack": "Nuts, Apple", "dinner": "Chicken salad, Sweet potato"},
-    "Thursday": {"bf": "Whole wheat bread 2, Omelette (2 eggs), Banana", "lunch": "Brown rice, Chicken breast, Veg", "snack": "Yogurt, Almonds", "dinner": "Grilled fish, Salad"},
-    "Friday": {"bf": "Oatmeal, Boiled eggs 2, Apple", "lunch": "Rice, Fish curry (low oil), Veg", "snack": "Banana + Peanuts", "dinner": "Chicken salad, Sweet potato"},
-    "Saturday": {"bf": "Whole wheat bread, Peanut butter, Boiled eggs", "lunch": "Brown rice, Grilled chicken, Veg", "snack": "Yogurt, Apple", "dinner": "Tuna salad"},
-    "Sunday": {"bf": "Oatmeal, Eggs 2, Banana", "lunch": "Rice, Fish/Chicken, Veg", "snack": "Nuts, Fruit", "dinner": "Chicken salad, Sweet potato"}
+    "Monday": {"bf": "Oatmeal, Eggs, Banana", "lunch": "Brown rice, Chicken, Veg", "snack": "Yogurt", "dinner": "Fish, Salad"},
+    "Tuesday": {"bf": "Bread, PB, Eggs", "lunch": "Brown rice, Curry, Veg", "snack": "Apple", "dinner": "Tuna salad"},
+    "Wednesday": {"bf": "Oatmeal, Eggs", "lunch": "Rice, Fish, Veg", "snack": "Nuts", "dinner": "Chicken salad"},
+    "Thursday": {"bf": "Bread, Omelette", "lunch": "Brown rice, Chicken", "snack": "Yogurt", "dinner": "Fish, Salad"},
+    "Friday": {"bf": "Oatmeal, Eggs", "lunch": "Rice, Fish curry", "snack": "Banana", "dinner": "Chicken salad"},
+    "Saturday": {"bf": "Bread, PB, Eggs", "lunch": "Brown rice, Chicken", "snack": "Apple", "dinner": "Tuna salad"},
+    "Sunday": {"bf": "Oatmeal, Eggs", "lunch": "Rice, Chicken, Veg", "snack": "Fruit", "dinner": "Chicken salad"}
 }
 
 # --- MAIN DASHBOARD ---
 st.write(f"### Welcome, {name}! ✨")
 st.markdown(f"Today is **{today_name}** ({real_date})")
 
+# DEFINE TABS
 tab1, tab2, tab3 = st.tabs(["📅 Daily Workout", "🥗 Daily Nutrition", "📈 Progress Status"])
 
 with tab1:
@@ -128,20 +72,21 @@ with tab1:
 with tab2:
     nutri = nutrition_data.get(today_name, nutrition_data["Monday"])
     st.subheader(f"Meal Plan for {today_name}")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.info(f"**🍳 Breakfast:** \n {nutri['bf']}")
-        st.info(f"**🍎 Snack:** \n {nutri['snack']}")
-    with col2:
-        st.success(f"**🍱 Lunch:** \n {nutri['lunch']}")
-        st.success(f"**🥗 Dinner:** \n {nutri['dinner']}")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.info(f"**Breakfast:** {nutri['bf']}")
+        st.info(f"**Snack:** {nutri['snack']}")
+    with c2:
+        st.success(f"**Lunch:** {nutri['lunch']}")
+        st.success(f"**Dinner:** {nutri['dinner']}")
 
 with tab3:
     st.subheader("Your Body Metrics")
-    st.markdown(f"<p style='font-size: 40px; font-weight: bold; color: #1f77b4 !important;'>{round(bmi, 2)}</p>", unsafe_allow_html=True)
+    st.metric("Your BMI", round(bmi, 2))
     st.divider()
     st.markdown("### ❗ Key Success Tips")
-    st.markdown("- **Water:** 2.5–3 Liters Daily\n- **Sleep:** 7–8 Hours\n- **Expected:** 3–5 kg loss in 3–4 weeks")
+    st.write("- **Water:** 2.5–3 Liters Daily")
+    st.write("- **Sleep:** 7–8 Hours")
 
 st.divider()
-st.markdown("<h3 style='text-align: center; color: #1f77b4 !important;'>\"Your only limit is you. Build the best version of yourself today!\"</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #1f77b4;'>\"Your only limit is you!\"</h3>", unsafe_allow_html=True)
