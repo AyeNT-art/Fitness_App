@@ -1,11 +1,10 @@
 import streamlit as st
 import datetime
 
-# Application Page Configuration (Tab Name & Icon)
+# Application Page Configuration
 st.set_page_config(page_title="Elite Fitness Coach", page_icon="🏋️‍♂️", layout="wide")
 
-# --- 🛑 ALL COLOR & DISPLAY FIXES (CSS) 🛑 ---
-# This forces light mode even if the phone is in dark mode
+# --- 🛑 THE FINAL UI FIX (FORCE LIGHT MODE) 🛑 ---
 st.markdown("""
     <style>
     /* 1. App Background - Force White */
@@ -14,59 +13,65 @@ st.markdown("""
         color: #000000 !important;
     }
 
-    /* 2. All Text (Headers, Paragraphs, Labels) - Force Black */
+    /* 2. All Text - Force Black */
     h1, h2, h3, h4, h5, h6, p, span, label, div {
         color: #000000 !important;
     }
 
-    /* 3. FIX: Sidebar Arrow & Text visibility */
-    #MainMenu, header, .stApp header {
-        background-color: #ffffff !important;
-    }
-    .stApp [data-testid="stSidebarCollapseButton"] svg {
-        fill: #000000 !important; /* Forces arrow to Black */
-    }
+    /* 3. SIDEBAR & INPUT BOX FIXES */
     section[data-testid="stSidebar"] {
-        background-color: #f1f3f6 !important; /* Light Gray Sidebar */
+        background-color: #f8f9fa !important; /* Sidebar light gray */
     }
-    section[data-testid="stSidebar"] * {
-        color: #000000 !important; /* All sidebar text Black */
+    
+    /* Input box background white and text black */
+    div[data-baseweb="input"] {
+        background-color: #ffffff !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 8px !important;
+    }
+    
+    input {
+        color: #000000 !important; /* Input text black */
+        -webkit-text-fill-color: #000000 !important;
     }
 
-    /* 4. FIX: Checkbox Text Visibility (ghost text fix) */
+    /* Sidebar collapse arrow black */
+    .stApp [data-testid="stSidebarCollapseButton"] svg {
+        fill: #000000 !important;
+    }
+
+    /* 4. CHECKBOX FIXES */
     .stCheckbox {
-        background-color: #f8f9fa !important; /* Faint gray background */
+        background-color: #f1f3f6 !important;
         padding: 15px !important;
         border-radius: 12px !important;
         border: 1px solid #d1d5db !important;
         margin-bottom: 10px !important;
     }
     .stCheckbox label div[data-testid="stMarkdownContainer"] p {
-        color: #000000 !important; /* Text is now SOLID BLACK */
-        font-size: 16px !important;
+        color: #000000 !important;
         font-weight: 500 !important;
     }
 
-    /* 5. Tabs Styling (Daily Workout, Nutrition) */
+    /* 5. TABS FIXES */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
         background-color: #ffffff !important;
     }
-    .stTabs [data-baseweb="tab"] {
-        border-radius: 8px 8px 0 0;
-        background-color: #f1f3f6;
-        color: #000000 !important;
-        font-weight: bold;
-    }
     .stTabs [data-baseweb="tab"] p {
-        color: #000000 !important; /* Ensure Tab Text is Black */
+        color: #000000 !important;
+        font-weight: bold !important;
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        background-color: #1f77b4 !important; /* Blue when selected */
+        background-color: #1f77b4 !important;
         color: #ffffff !important;
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] p {
         color: #ffffff !important;
+    }
+
+    /* Progress Status List Fix (Success Tips) */
+    ul li {
+        color: #000000 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -82,13 +87,12 @@ height = st.sidebar.number_input("Height (cm)", value=162.56)
 # BMI Logic
 bmi = weight / ((height/100) ** 2)
 
-# --- DATABASE & DYNAMIC DAY ---
-# 1. FIX: Dynamic Date Logic (Get Real Day)
+# --- DYNAMIC DATE LOGIC ---
 today_dt = datetime.datetime.now()
-today_name = today_dt.strftime("%A") # e.g., "Monday"
-real_date = today_dt.strftime("%d %b %Y") # e.g., "Monday, 27 May 2024"
+today_name = today_dt.strftime("%A") 
+real_date = today_dt.strftime("%d %b %Y") 
 
-# Plans remain the same
+# Data (Workout & Nutrition)
 workout_data = {
     "Monday": {"focus": "Chest + Triceps", "ex": ["Bench Press – 4 × 10", "Incline Dumbbell Press – 3 × 10", "Push Ups – 3 × 15", "Tricep Dips – 3 × 12", "Tricep Pushdown – 3 × 12", "Cardio (Treadmill) – 15 min"]},
     "Tuesday": {"focus": "Back + Biceps", "ex": ["Lat Pulldown – 4 × 10", "Seated Row – 3 × 10", "Dumbbell Row – 3 × 10", "Barbell Curl – 3 × 12", "Hammer Curl – 3 × 12", "Cardio – 15 min"]},
@@ -111,22 +115,19 @@ nutrition_data = {
 
 # --- MAIN DASHBOARD ---
 st.write(f"### Welcome, {name}! ✨")
-st.markdown(f"Today is **{today_name}** ({real_date})") # Display real day and date
+st.markdown(f"Today is **{today_name}** ({real_date})")
 
 tab1, tab2, tab3 = st.tabs(["📅 Daily Workout", "🥗 Daily Nutrition", "📈 Progress Status"])
 
 with tab1:
-    plan = workout_data[today_name] # Use dynamic day
+    plan = workout_data.get(today_name, workout_data["Monday"])
     st.subheader(f"Focus: {plan['focus']}")
-    st.write("Mark exercises as completed:")
     for ex in plan['ex']:
-        # Unique keys ensure checkboxes work independently
-        st.checkbox(ex, key=f"ex_{ex}_{today_name}") 
+        st.checkbox(ex, key=f"ex_{ex}_{today_name}")
 
 with tab2:
-    nutri = nutrition_data[today_name] # Use dynamic day
+    nutri = nutrition_data.get(today_name, nutrition_data["Monday"])
     st.subheader(f"Meal Plan for {today_name}")
-    
     col1, col2 = st.columns(2)
     with col1:
         st.info(f"**🍳 Breakfast:** \n {nutri['bf']}")
@@ -137,14 +138,10 @@ with tab2:
 
 with tab3:
     st.subheader("Your Body Metrics")
-    # Clean, large BMI display
     st.markdown(f"<p style='font-size: 40px; font-weight: bold; color: #1f77b4 !important;'>{round(bmi, 2)}</p>", unsafe_allow_html=True)
-    
     st.divider()
     st.markdown("### ❗ Key Success Tips")
     st.markdown("- **Water:** 2.5–3 Liters Daily\n- **Sleep:** 7–8 Hours\n- **Expected:** 3–5 kg loss in 3–4 weeks")
 
-# --- FOOTER ---
 st.divider()
-# Motivational text remains at bottom
 st.markdown("<h3 style='text-align: center; color: #1f77b4 !important;'>\"Your only limit is you. Build the best version of yourself today!\"</h3>", unsafe_allow_html=True)
